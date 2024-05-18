@@ -1,0 +1,16 @@
+[credential]
+	helper = manager-core
+[user]
+	name = Chengvy
+	email = chengvy@outlook.com
+[core]
+	editor = nvim
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[alias]
+	logg = log --graph --date-order --date=short --pretty='%C(yellow)%h %Cgreen%cd%Cred%d %C(cyan)%s'
+[diff]
+	tool = nvim -d

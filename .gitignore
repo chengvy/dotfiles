@@ -1,0 +1,8 @@
+# temp files directories
+cache/
+log/
+*.swp
+*~
+
+# editor configs
+.vscode
