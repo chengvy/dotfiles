@@ -60,9 +60,9 @@ setup_dotfiles() {
         exit 1
     fi
     echo "Cloning dotfiles..."
-    git clone --depth=1 --branch "$BRANCH" "$REMOTE" "$DOTHOME" || {
+    git clone --depth=1 --recurse-submodules --branch "$BRANCH" "$REMOTE" "$DOTHOME" || {
         [[ -d "$DOTHOME" ]] && rm -rf "$DOTHOME" &>/dev/null
-        fmt_error "git clone of $REPO repo failed"
+        echo "git clone of $REPO repo failed"
         exit 1
     }
 
