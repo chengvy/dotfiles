@@ -17,18 +17,30 @@ command_exists() {
     command -v "$@" &>/dev/null
 }
 
+fmt_link() {
+    printf '\e[4m%s\e[22m\e[0m\n' "$*"
+}
+
+fmt_error() {
+    printf '\e[1;31mError: %s\e[0m\n' "$*"
+}
+
+fmt_info() {
+    printf '\e[34m%s\e[0m\n' "$*"
+}
+
 backup_file() {
     local file=$1
     if [[ -e "$file" ]]; then
         local backup
         backup="$file.bak-$(date +%Y-%m-%d_%H-%M-%S)"
         if [[ -e "$backup" ]]; then
-            echo "$backup exists. Can't back up $file"
+            echo "$(fmt_link "$backup") exists. Can't back up $(fmt_link "$file")"
             echo "re-run again in a couple of seconds"
             return 1
         fi
         mv "$file" "$backup"
-        echo "Found $file. Backing up to $backup"
+        echo "Found $(fmt_link "$file"). Backing up to $(fmt_link "$backup")"
     fi
 }
 
@@ -37,61 +49,57 @@ link_file() {
     local dest=$2
     if [[ -L "$dest" ]]; then
         if [[ "$src" == "$(readlink "$dest")" ]]; then
-            echo "$dest is already linked to $src"
+            echo "$(fmt_link "$dest") is already linked to $(fmt_link "$src")"
         else
-            echo "Linked $dest (-> $(readlink "$dest")) to $src"
+            echo "Linked $(fmt_link "$dest") (-> $(fmt_link "$(readlink "$dest")")) to $(fmt_link "$src")"
             ln -sf "$src" "$dest"
         fi
         return
     fi
     backup_file "$dest"
     ln -s "$src" "$dest"
-    echo "Linked $dest to $src"
+    echo "Linked $(fmt_link "$dest") to $(fmt_link "$src")"
 }
 
 setup_dotfiles() {
-    echo "Setting up dotfiles..."
+    fmt_info "Setting up dotfiles..."
     if [[ -d "$DOTHOME" ]]; then
-        echo "The $DOTHOME folder already exists"
+        echo "$(fmt_link "$DOTHOME") folder already exists"
         return
     fi
     if ! command_exists git; then
-        echo "Error: git is not installed"
+        fmt_error "git is not installed"
         exit 1
     fi
-    echo "Cloning dotfiles..."
+    fmt_info "Cloning dotfiles..."
     git clone --depth=1 --recurse-submodules --branch "$BRANCH" "$REMOTE" "$DOTHOME" || {
         [[ -d "$DOTHOME" ]] && rm -rf "$DOTHOME" &>/dev/null
-        echo "git clone of $REPO repo failed"
+        fmt_error "git clone of $(fmt_link "$REPO") repo failed"
         exit 1
     }
 
 }
 
 setup_ohmyzsh() {
-    echo "Setting up Oh My Zsh..."
-    if [[ -d "$ZSH" ]]; then
-        echo "The $ZSH folder already exists"
-        return
-    fi
+    fmt_info "Setting up Oh My Zsh..."
     ZSH=$ZSH sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended --keep-zshrc"
 }
 
 setup_nvim() {
-    echo "Setting up nvim..."
+    fmt_info "Setting up nvim..."
     link_file "$DOTHOME/nvim" "$HOME/.config/nvim"
 
 }
 
 setup_config() {
-    echo "Setting up config..."
+    fmt_info "Setting up config..."
     local DOT_CONFIG="$DOTHOME/config"
     link_file "$DOT_CONFIG/gitconfig" "$HOME/.gitconfig"
     link_file "$DOT_CONFIG/condarc" "$HOME/.condarc"
 }
 
 setup_zshrc() {
-    echo "Setting up zshrc..."
+    fmt_info "Setting up zshrc..."
 
     local dot=${DOTHOME/#$HOME\//"\$HOME/"}
     local omz=${ZSH/#$HOME\//"\$HOME/"}
@@ -111,7 +119,7 @@ setup_shell() {
     if [[ "$(basename -- "$SHELL")" == "zsh" ]]; then
         return
     fi
-    echo "Changing shell to $(which zsh)"
+    echo "Changing shell to $(fmt_link "$(which zsh)")"
     chsh -s "$(which zsh)" "$USER"
 }
 
