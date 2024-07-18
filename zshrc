@@ -26,3 +26,6 @@ plugins+=zsh-autosuggestions
 plugins+=zsh-syntax-highlighting
 
 [[ -d $ZSH ]] && source $ZSH/oh-my-zsh.sh
+
+#
+unsetopt correct correct_all
