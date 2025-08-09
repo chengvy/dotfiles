@@ -11,6 +11,6 @@
 	process = git-lfs filter-process
 	required = true
 [alias]
-	logg = log --graph --date-order --date=short --pretty='%C(yellow)%h %Cgreen%cd%Cred%d %C(cyan)%s'
+	logg = log --graph --color=always --decorate --date=short --date-order --pretty='%C(auto)%h %C(green)%an %C(cyan)%ad%C(auto)%d %s'
 [diff]
 	tool = nvim -d

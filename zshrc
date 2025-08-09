@@ -21,6 +21,7 @@ ZSH_CUSTOM="$DOTHOME/zsh"
 ZSH_THEME="agnoster"
 
 plugins=(git aliases)
+plugins+=config
 plugins+=conda-zsh-completion
 plugins+=zsh-autosuggestions
 plugins+=zsh-syntax-highlighting

@@ -36,7 +36,7 @@ backup_file() {
         backup="$file.bak-$(date +%Y-%m-%d_%H-%M-%S)"
         if [[ -e "$backup" ]]; then
             echo "$(fmt_link "$backup") exists. Can't back up $(fmt_link "$file")"
-            echo "re-run again in a couple of seconds"
+            echo "Re-run again in a couple of seconds"
             return 1
         fi
         mv "$file" "$backup"
@@ -96,6 +96,7 @@ setup_config() {
     local DOT_CONFIG="$DOTHOME/config"
     link_file "$DOT_CONFIG/gitconfig" "$HOME/.gitconfig"
     link_file "$DOT_CONFIG/condarc" "$HOME/.condarc"
+    link_file "$DOT_CONFIG/tmux.conf" "$HOME/.tmux.conf"
 }
 
 setup_zshrc() {
