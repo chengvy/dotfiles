@@ -23,7 +23,7 @@ map({ "n", "v", "i" }, "<M-q>", function()
     elseif #vim.api.nvim_list_tabpages() > 1 then
         vim.cmd("tabclose")
     elseif #bufs > 1 then
-        require("lazyvim.util.ui").bufremove()
+        require("snacks").bufdelete()
     else
         vim.cmd("quitall")
     end
