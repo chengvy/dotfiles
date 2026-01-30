@@ -22,6 +22,9 @@ ZSH_THEME="agnoster"
 
 plugins=(git aliases)
 plugins+=config
+plugins+=cd-dirs
+plugins+=dircycle
+plugins+=z
 plugins+=conda-zsh-completion
 plugins+=zsh-autosuggestions
 plugins+=zsh-syntax-highlighting
